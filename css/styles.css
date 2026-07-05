@@ -1,4 +1,4 @@
-/* ===== Base ===== */
+/* ===== Base & thème ===== */
 * {
   box-sizing: border-box;
 }
@@ -6,13 +6,39 @@
 :root {
   --primary: #6b4fbb;
   --primary-dark: #543b99;
+  --on-primary: #ffffff;
   --bg: #f6f4fb;
   --card-bg: #ffffff;
   --text: #2b2b33;
   --muted: #71717a;
   --border: #e2e0ea;
+  --hover-tint: #f3effd;
   --danger: #c0392b;
-  --radius: 10px;
+  --success: #1e8e3e;
+  --frame: #d8d4e6;
+  --radius: 12px;
+  --bottom-nav-h: 64px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #9b84e8;
+    --primary-dark: #b3a1f0;
+    --on-primary: #17151f;
+    --bg: #17151f;
+    --card-bg: #211e2c;
+    --text: #e9e6f2;
+    --muted: #9c97ad;
+    --border: #363146;
+    --hover-tint: #2b2740;
+    --danger: #e5766a;
+    --success: #6fce8f;
+    --frame: #100e17;
+  }
+}
+
+html, body {
+  height: 100%;
 }
 
 body {
@@ -21,16 +47,11 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
 }
 
-main {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-h2 {
-  margin-top: 1rem;
+h2, h3 {
+  text-wrap: balance;
 }
 
 .muted {
@@ -38,39 +59,138 @@ h2 {
   font-size: 0.9rem;
 }
 
-/* ===== Header & navigation ===== */
-.app-header {
-  background: var(--primary);
-  color: #fff;
-  padding: 1rem 1rem 0;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.app-header h1 {
-  margin: 0 0 0.75rem;
-  font-size: 1.4rem;
-  text-align: center;
-}
-
-.tabs {
+/* ===== Cadre de l'app ===== */
+.app {
   display: flex;
-  justify-content: center;
-  gap: 0.25rem;
-}
-
-.tab {
-  color: #e8e3f7;
-  text-decoration: none;
-  padding: 0.6rem 1rem;
-  border-radius: var(--radius) var(--radius) 0 0;
-  font-weight: 500;
-}
-
-.tab.active {
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
   background: var(--bg);
-  color: var(--primary-dark);
+  overflow: hidden;
 }
 
-/* ===== Cards & forms ===== */
+/* Sur un vrai écran de mobile, l'app occupe tout l'espace.
+   Sur desktop, on la présente dans un cadre façon téléphone. */
+@media (min-width: 640px) {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--frame);
+  }
+
+  .app {
+    height: min(880px, 94vh);
+    border-radius: 36px;
+    border: 10px solid var(--frame);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* ===== Barre d'app (titre de l'écran) ===== */
+.app-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding-top: env(safe-area-inset-top);
+  background: var(--primary);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+  z-index: 1;
+}
+
+.app-bar h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--on-primary);
+}
+
+/* ===== Écrans ===== */
+.screens {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1rem;
+}
+
+.screen {
+  animation: screen-in 0.18s ease-out;
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen {
+    animation: none;
+  }
+}
+
+/* ===== Navigation basse ===== */
+.bottom-nav {
+  flex-shrink: 0;
+  display: flex;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border);
+  padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom));
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 48px;
+  padding: 0.3rem 0.25rem;
+  border-radius: 10px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.nav-item.active {
+  color: var(--primary);
+  background: var(--hover-tint);
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.nav-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* ===== Cartes & formulaires ===== */
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -95,11 +215,15 @@ input[type="number"],
 input[type="search"] {
   display: block;
   width: 100%;
+  min-height: 44px;
   margin-top: 0.25rem;
   padding: 0.5rem 0.65rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1rem;
+  background: var(--card-bg);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
 
 input:focus {
@@ -133,11 +257,12 @@ input:focus {
 }
 
 button {
+  min-height: 44px;
   padding: 0.55rem 1rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -147,9 +272,14 @@ button:hover {
   background: var(--primary-dark);
 }
 
+button:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
 button.btn-secondary {
   background: transparent;
-  color: var(--primary-dark);
+  color: var(--primary);
   border: 1px solid var(--border);
 }
 
@@ -158,6 +288,9 @@ button.btn-danger {
   color: var(--danger);
   border: 1px solid var(--border);
   font-weight: 500;
+  min-height: 36px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
 }
 
 /* ===== Filtres bibliothèque ===== */
@@ -170,16 +303,18 @@ button.btn-danger {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .filters label {
   flex: 1;
-  min-width: 110px;
+  min-width: 100px;
   margin-bottom: 0;
 }
 
 .filters button {
   margin-bottom: 2px;
+  min-height: 40px;
 }
 
 /* ===== Listes de jeux ===== */
@@ -201,24 +336,24 @@ button.btn-danger {
   margin-bottom: 0.6rem;
 }
 
-.game-item img {
-  width: 56px;
-  height: 56px;
-  object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
+.game-item img,
 .game-item .thumb-placeholder {
   width: 56px;
   height: 56px;
-  border-radius: 6px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.game-item img {
+  object-fit: cover;
+}
+
+.game-item .thumb-placeholder {
   background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  flex-shrink: 0;
 }
 
 .game-item .game-info {
@@ -235,33 +370,38 @@ button.btn-danger {
   margin: 0.15rem 0 0;
   font-size: 0.85rem;
   color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ===== Résultats de recherche BGG ===== */
 .search-results li {
-  padding: 0.5rem 0.65rem;
+  padding: 0.6rem 0.65rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 0.4rem;
   cursor: pointer;
   background: var(--card-bg);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .search-results li:hover {
   border-color: var(--primary);
-  background: #f3effd;
+  background: var(--hover-tint);
 }
 
 .search-results .result-year {
   color: var(--muted);
   font-size: 0.85rem;
+  margin-left: 0.35rem;
 }
 
 /* ===== États ===== */
 .empty-state {
   text-align: center;
   color: var(--muted);
-  padding: 2rem 1rem;
+  padding: 2.5rem 1rem;
 }
 
 .status-error {
@@ -269,21 +409,12 @@ button.btn-danger {
 }
 
 .status-success {
-  color: #1e8e3e;
+  color: var(--success);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 380px) {
   .form-row,
   .inline-form {
     flex-direction: column;
-  }
-
-  .tabs {
-    gap: 0;
-  }
-
-  .tab {
-    padding: 0.6rem 0.7rem;
-    font-size: 0.9rem;
   }
 }

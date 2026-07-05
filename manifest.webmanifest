@@ -1,0 +1,19 @@
+{
+  "name": "Soirée Jeux",
+  "short_name": "Soirée Jeux",
+  "description": "Organisez vos soirées jeux de société à partir de votre ludothèque.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f4fb",
+  "theme_color": "#6b4fbb",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
