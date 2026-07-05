@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soirée Jeux — Ma ludothèque</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>🎲 Soirée Jeux</h1>
+    <nav class="tabs">
+      <a href="#bibliotheque" class="tab" data-view="bibliotheque">Bibliothèque</a>
+      <a href="#ajout" class="tab" data-view="ajout">Ajouter un jeu</a>
+      <a href="#suggestion" class="tab" data-view="suggestion">Suggestion</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Vue Bibliothèque -->
+    <section id="view-bibliotheque" class="view">
+      <h2>Ma bibliothèque</h2>
+      <form id="library-filters" class="filters">
+        <label>
+          Joueurs
+          <input type="number" name="players" min="1" placeholder="ex : 4">
+        </label>
+        <label>
+          Âge min. (max)
+          <input type="number" name="maxAge" min="0" placeholder="ex : 8">
+        </label>
+        <label>
+          Durée max. (min)
+          <input type="number" name="maxDuration" min="0" step="5" placeholder="ex : 60">
+        </label>
+        <button type="reset" class="btn-secondary">Réinitialiser</button>
+      </form>
+      <p id="library-count" class="muted"></p>
+      <ul id="library-list" class="game-list"></ul>
+      <p id="library-empty" class="empty-state" hidden>
+        Aucun jeu dans votre bibliothèque. Ajoutez-en depuis l'onglet « Ajouter un jeu » !
+      </p>
+    </section>
+
+    <!-- Vue Ajout de jeu -->
+    <section id="view-ajout" class="view" hidden>
+      <h2>Ajouter un jeu</h2>
+
+      <div class="card">
+        <h3>Rechercher sur BoardGameGeek</h3>
+        <form id="bgg-search-form" class="inline-form">
+          <input type="search" id="bgg-query" placeholder="Nom du jeu (ex : Catan)" required>
+          <button type="submit">Rechercher</button>
+        </form>
+        <p id="bgg-status" class="muted" hidden></p>
+        <ul id="bgg-results" class="search-results"></ul>
+      </div>
+
+      <div class="card">
+        <h3>Saisie manuelle</h3>
+        <p class="muted">Sélectionnez un résultat BGG pour pré-remplir, ou saisissez tout à la main.</p>
+        <form id="add-game-form">
+          <input type="hidden" name="bggId">
+          <input type="hidden" name="thumbnail">
+          <label>
+            Nom du jeu *
+            <input type="text" name="name" required>
+          </label>
+          <div class="form-row">
+            <label>
+              Joueurs min. *
+              <input type="number" name="minPlayers" min="1" value="2" required>
+            </label>
+            <label>
+              Joueurs max. *
+              <input type="number" name="maxPlayers" min="1" value="4" required>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              Âge minimum
+              <input type="number" name="minAge" min="0" placeholder="ex : 8">
+            </label>
+            <label>
+              Durée (minutes)
+              <input type="number" name="playTime" min="0" step="5" placeholder="ex : 45">
+            </label>
+          </div>
+          <label>
+            Année de publication
+            <input type="number" name="yearPublished" min="1900" max="2100" placeholder="ex : 2017">
+          </label>
+          <div class="form-actions">
+            <button type="submit">Ajouter à ma bibliothèque</button>
+            <button type="reset" class="btn-secondary">Vider le formulaire</button>
+          </div>
+        </form>
+        <p id="add-status" class="muted" hidden></p>
+      </div>
+    </section>
+
+    <!-- Vue Suggestion -->
+    <section id="view-suggestion" class="view" hidden>
+      <h2>Suggestion de soirée</h2>
+      <div class="card">
+        <form id="suggest-form">
+          <div class="form-row">
+            <label>
+              Nombre de joueurs *
+              <input type="number" name="players" min="1" value="4" required>
+            </label>
+            <label>
+              Âge du plus jeune
+              <input type="number" name="youngestAge" min="0" placeholder="ex : 10">
+            </label>
+            <label>
+              Temps disponible (min)
+              <input type="number" name="availableTime" min="0" step="15" placeholder="ex : 90">
+            </label>
+          </div>
+          <button type="submit">Proposer des jeux</button>
+        </form>
+      </div>
+      <div id="suggest-results-wrapper" hidden>
+        <h3 id="suggest-title"></h3>
+        <ul id="suggest-results" class="game-list"></ul>
+        <p id="suggest-empty" class="empty-state" hidden>
+          Aucun jeu compatible dans votre bibliothèque pour ces critères. 😕
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
